@@ -6,7 +6,7 @@ eureka:
 #    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: false
-    # ??? ??? ?? ????? ???? ??? ??? ??? ??
+    # 자기자신을 등록하지 않음
     fetch-registry: false
     service-url:
       defaultZone: http://localhost:8761/eureka
@@ -14,14 +14,35 @@ eureka:
 spring:
   application:
     name: gateway-service
-#  cloud:
-#    gateway:
-#      routes:
-#        - id: first-service
-#          uri: http://localhost:8081/
-#          predicates:
-#            - Path=/first-service/**
-#        - id: second-sevice
-#          uri: http://localhost:8082/
-#          predicates:
-#            - Path=/second-service/**
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: first-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/first-service/**
+          filters:
+            # key, value
+#            - AddRequestHeader=first-req, fir-req-header-application_yml
+#            - AddResponseHeader=first-res, fir-res-header-application_yml
+            - name: CustomFilter
+        - id: second-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/second-service/**
+          filters:
+            # key, value
+#            - AddRequestHeader=sec-req, sec-req-header-application_yml
+#            - AddResponseHeader=sec-res, sec-res-header-application_yml
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Hi, there.
+                preLogger: true
+                postLogger: true
