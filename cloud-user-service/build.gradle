@@ -2,8 +2,16 @@ ext['springCloudVersion'] = "2021.0.3"
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    // 또는 D 옵션으로 -Dspring.cloud.bootstrap.enabled=true
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    // refresh endpoint 제공
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // advanced message queuing protocol
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 }
 
 dependencyManagement {
